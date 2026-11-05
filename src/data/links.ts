@@ -20,9 +20,9 @@ export interface CategoryTab {
 
 export const CATEGORIES: CategoryTab[] = [
   { id: "all", name: "جميع الروابط", count: 24 },
+  { id: "eworld", name: "خدمات eWorld", count: 13 },
   { id: "top-products", name: "أفضل 5 منتجات", count: 5 },
   { id: "vitality", name: "تعزيز الحيوية", count: 6 },
-  { id: "eworld", name: "خدمات eWorld", count: 13 },
 ];
 
 export const LINKS_DATA: LinkItem[] = [
@@ -168,11 +168,13 @@ export const LINKS_DATA: LinkItem[] = [
     title: "أصبح موزعا ضم عضو جديد",
     category: "eworld",
     categoryLabel: "خدمات eWorld",
-    url: "https://eworld.dxn2u.com/auth/register/distributor/",
-    requiresMemberId: false,
+    url: "https://eworld.dxn2u.com/auth/register/distributor/?sponsor_code=123456789",
+    templateUrl: "https://eworld.dxn2u.com/auth/register/distributor/?sponsor_code={MEMBER_ID}",
+    defaultMemberId: "123456789",
+    requiresMemberId: true,
     image: "/previews/link-13.png",
     domain: "eworld.dxn2u.com",
-    subtitle: "مع ضرورة إرسال رمز الراعي والدليل",
+    subtitle: "مع ضرورة إدخال رقم عضويتك كراعي ودليل لضمان تسجيل العضو الجديد تحت شبكتك وليس تحت الشركة مباشرة",
   },
   {
     id: 14,

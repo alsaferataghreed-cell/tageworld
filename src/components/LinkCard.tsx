@@ -9,10 +9,11 @@ import {
   Check,
   Share2,
   Lock,
-  Sparkles,
   Layers,
   HeartPulse,
   Award,
+  AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 
 interface LinkCardProps {
@@ -30,9 +31,23 @@ export default function LinkCard({
 }: LinkCardProps) {
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedDesc, setCopiedDesc] = useState(false);
+  const [showWarningBox, setShowWarningBox] = useState(false);
 
   const isConfigured = Boolean(memberId && memberId.trim().length > 0);
   const resolvedUrl = resolveLinkUrl(item, memberId);
+
+  const requireMemberIdGuard = (): boolean => {
+    if (item.requiresMemberId && !isConfigured) {
+      setShowWarningBox(true);
+      onToast(
+        "تنبيه هام: يجب إدخال رقم عضويتك في الأعلى أولاً ليتم التسجيل تحت رقم عضويتك الصحيح وليس تحت الشركة مباشرة."
+      );
+      onFocusMemberInput?.();
+      return false;
+    }
+    setShowWarningBox(false);
+    return true;
+  };
 
   const getCategoryBadgeColor = (cat: LinkItem["category"]) => {
     switch (cat) {
@@ -61,16 +76,12 @@ export default function LinkCard({
   };
 
   const handleCopyUrl = async () => {
+    if (!requireMemberIdGuard()) return;
     try {
       await navigator.clipboard.writeText(resolvedUrl);
       setCopiedUrl(true);
 
-      if (item.requiresMemberId && !isConfigured) {
-        onToast(
-          `تنبيه: تم نسخ الرابط بالرمز الافتراضي (${item.defaultMemberId}). يرجى إدخال رقم عضويتك في الأعلى لتخصيص الرابط لك.`
-        );
-        onFocusMemberInput?.();
-      } else if (item.requiresMemberId && isConfigured) {
+      if (item.requiresMemberId && isConfigured) {
         onToast(`تم نسخ رابط "${item.title}" برقم عضويتك (${memberId}) بنجاح`);
       } else {
         onToast(`تم نسخ رابط "${item.title}"`);
@@ -83,6 +94,7 @@ export default function LinkCard({
   };
 
   const handleCopyWithDescription = async () => {
+    if (!requireMemberIdGuard()) return;
     try {
       const textToCopy = item.subtitle
         ? `${item.title}\n${item.subtitle}\n${resolvedUrl}`
@@ -90,12 +102,7 @@ export default function LinkCard({
       await navigator.clipboard.writeText(textToCopy);
       setCopiedDesc(true);
 
-      if (item.requiresMemberId && !isConfigured) {
-        onToast(
-          `تنبيه: تم النسخ بالرمز الافتراضي (${item.defaultMemberId}). أدخل رقم عضويتك في الأعلى لتخصيص الرابط.`
-        );
-        onFocusMemberInput?.();
-      } else if (item.requiresMemberId && isConfigured) {
+      if (item.requiresMemberId && isConfigured) {
         onToast(`تم نسخ العنوان والرابط المخصص برقم عضويتك (${memberId})`);
       } else {
         onToast(`تم نسخ العنوان والرابط لـ "${item.title}"`);
@@ -108,20 +115,15 @@ export default function LinkCard({
   };
 
   const handleOpen = () => {
-    if (item.requiresMemberId && !isConfigured) {
-      onToast(
-        `تنبيه: تم فتح الرابط بالرمز الافتراضي (${item.defaultMemberId}). أدخل رقم عضويتك في الأعلى لتخصيصه.`
-      );
-      onFocusMemberInput?.();
-    }
+    if (!requireMemberIdGuard()) return;
     window.open(resolvedUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <article className="group bg-white rounded-2xl border border-slate-200/80 hover:border-slate-300 shadow-subtle hover:shadow-card-hover transition-all duration-300 flex flex-col overflow-hidden">
+    <article className="group bg-white rounded-2xl border-[3px] border-[#0F2557]/20 hover:border-[#0F2557] shadow-card hover:shadow-card-hover transition-all duration-300 flex flex-col overflow-hidden">
       
       {/* Browser Window Header Mockup */}
-      <div className="bg-slate-100/90 border-b border-slate-200/70 px-4 py-2.5 flex items-center justify-between text-xs text-slate-500 select-none">
+      <div className="bg-slate-100 border-b-2 border-slate-200/90 px-4 py-2.5 flex items-center justify-between text-xs text-slate-500 select-none">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-slate-300 group-hover:bg-red-400 transition-colors" />
           <span className="w-2.5 h-2.5 rounded-full bg-slate-300 group-hover:bg-amber-400 transition-colors" />
@@ -155,9 +157,24 @@ export default function LinkCard({
         
         {/* Dynamic ID indicator badge */}
         {item.requiresMemberId && (
-          <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 bg-white/95 backdrop-blur-md text-[#0A192F] text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm border border-slate-200/80">
-            <Sparkles className="w-3 h-3 text-[#0F2557]" />
-            <span>{isConfigured ? "مخصص بعضويتك" : "رابط مخصص"}</span>
+          <div
+            className={`absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full shadow-md border backdrop-blur-md transition-colors ${
+              isConfigured
+                ? "bg-emerald-600/95 text-white border-emerald-400"
+                : "bg-amber-500/95 text-white border-amber-300"
+            }`}
+          >
+            {isConfigured ? (
+              <>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>مربوط برقم عضويتك: {memberId}</span>
+              </>
+            ) : (
+              <>
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>يتطلب إدخال رقم العضوية</span>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -179,11 +196,23 @@ export default function LinkCard({
 
             {item.requiresMemberId && (
               <span
-                className={`text-[11px] font-mono ${
-                  isConfigured ? "text-emerald-700 font-semibold" : "text-slate-500"
+                className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                  isConfigured
+                    ? "bg-emerald-50 text-emerald-800 border-emerald-200 font-mono"
+                    : "bg-amber-50 text-amber-900 border-amber-300"
                 }`}
               >
-                {isConfigured ? `عضويتك: ${memberId}` : `افتراضي: ${item.defaultMemberId}`}
+                {isConfigured ? (
+                  <>
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                    <span>الراعي: {memberId}</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="w-3 h-3 text-amber-600" />
+                    <span>تنبيه: غير مربوط برقم عضوية</span>
+                  </>
+                )}
               </span>
             )}
           </div>
@@ -198,6 +227,37 @@ export default function LinkCard({
             <p className="text-xs text-slate-500 leading-relaxed mb-3">
               {item.subtitle}
             </p>
+          )}
+
+          {/* Mandatory Member ID Warning Alert Box inside card if requiresMemberId and not configured */}
+          {item.requiresMemberId && !isConfigured && (
+            <div
+              onClick={() => onFocusMemberInput?.()}
+              className={`mb-3 rounded-xl p-2.5 border text-[11px] leading-relaxed cursor-pointer transition-all flex items-start gap-2 ${
+                showWarningBox
+                  ? "bg-red-50 border-red-300 text-red-900 ring-2 ring-red-200"
+                  : "bg-amber-50/90 border-amber-300/90 text-amber-950 hover:bg-amber-100/70"
+              }`}
+            >
+              <AlertTriangle
+                className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
+                  showWarningBox ? "text-red-600" : "text-amber-600"
+                }`}
+              />
+              <div>
+                <span className="font-bold block mb-0.5">
+                  {showWarningBox
+                    ? "عذراً، لا يمكن فتح أو نسخ الرابط قبل وضع رقم عضويتك!"
+                    : "تنبيه قبل الفتح أو النسخ:"}
+                </span>
+                <span>
+                  أدخل رقم عضويتك في الحقل أعلى الصفحة ليتم تسجيل العضو الجديد تحت اسمك ورقم عضويتك الصحيح وليس تحت الشركة.{" "}
+                  <strong className="underline font-bold text-[#0F2557]">
+                    اضغط هنا لإدخال رقم عضويتك الآن
+                  </strong>
+                </span>
+              </div>
+            </div>
           )}
 
           {/* Live URL Snippet */}

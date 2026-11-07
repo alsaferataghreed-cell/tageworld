@@ -14,6 +14,10 @@ import {
   Award,
   AlertTriangle,
   ShieldCheck,
+  Globe,
+  Store,
+  Package,
+  Building2,
 } from "lucide-react";
 
 interface LinkCardProps {
@@ -57,6 +61,14 @@ export default function LinkCard({
         return "bg-emerald-50 text-emerald-900 border-emerald-200/80";
       case "eworld":
         return "bg-navy-50 text-[#0F2557] border-navy-100";
+      case "portals":
+        return "bg-sky-50 text-sky-900 border-sky-200/80";
+      case "stores":
+        return "bg-indigo-50 text-indigo-900 border-indigo-200/80";
+      case "catalog":
+        return "bg-teal-50 text-teal-900 border-teal-200/80";
+      case "company":
+        return "bg-purple-50 text-purple-900 border-purple-200/80";
       default:
         return "bg-slate-100 text-slate-800 border-slate-200";
     }
@@ -70,6 +82,14 @@ export default function LinkCard({
         return <HeartPulse className="w-3 h-3 text-emerald-700" />;
       case "eworld":
         return <Layers className="w-3 h-3 text-[#0F2557]" />;
+      case "portals":
+        return <Globe className="w-3 h-3 text-sky-700" />;
+      case "stores":
+        return <Store className="w-3 h-3 text-indigo-700" />;
+      case "catalog":
+        return <Package className="w-3 h-3 text-teal-700" />;
+      case "company":
+        return <Building2 className="w-3 h-3 text-purple-700" />;
       default:
         return null;
     }

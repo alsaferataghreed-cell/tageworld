@@ -198,7 +198,7 @@ export default function HomePage() {
               <span>منظومة الروابط والخدمات الرقمية السريعة</span>
             </div>
             <div className="flex items-center gap-4 text-[11px] font-mono text-slate-400">
-              <span>24 رابط رسمي</span>
+              <span>{LINKS_DATA.length} رابط رسمي</span>
               <span>•</span>
               <span>تحديث تلقائي لرقم العضوية</span>
               <span>•</span>

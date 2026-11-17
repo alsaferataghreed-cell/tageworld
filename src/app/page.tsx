@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import CategoryFilter from "@/components/CategoryFilter";
 import LinkCard from "@/components/LinkCard";
 import Toast from "@/components/Toast";
+import PwaInstallModal, { usePwaInstall } from "@/components/PwaInstallModal";
 import { LINKS_DATA, CategoryTab } from "@/data/links";
 import {
   Sparkles,
@@ -12,6 +13,8 @@ import {
   Zap,
   RefreshCw,
   SearchX,
+  Download,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -36,6 +39,8 @@ export default function HomePage() {
       setToastMessage(null);
     }, 3200);
   }, []);
+
+  const pwa = usePwaInstall(showToast);
 
   const focusMemberInput = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -78,6 +83,9 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
       {/* Toast Notification */}
       <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+
+      {/* PWA Install Pop-up Modal */}
+      <PwaInstallModal pwa={pwa} />
 
       {/* Main Header with Smart Membership Injector */}
       <Header memberId={memberId} setMemberId={setMemberId} onToast={showToast} />
@@ -191,18 +199,43 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-slate-200/80 bg-white py-8 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div className="flex items-center gap-2">
               <span className="font-bold text-[#0A192F]">TAG eWorld</span>
               <span>—</span>
               <span>منظومة الروابط والخدمات الرقمية السريعة</span>
             </div>
-            <div className="flex items-center gap-4 text-[11px] font-mono text-slate-400">
-              <span>{LINKS_DATA.length} رابط رسمي</span>
-              <span>•</span>
-              <span>تحديث تلقائي لرقم العضوية</span>
-              <span>•</span>
-              <span>حفظ محلي آمن</span>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
+              {pwa.isInstalled ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    showToast("تطبيق دليل الروابط السريعة منزل بالفعل على جهازك")
+                  }
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold cursor-default"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>التطبيق منزل</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={pwa.handleFooterInstallClick}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#0F2557] hover:bg-[#0A192F] text-white text-xs font-semibold shadow-sm hover:shadow transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>تنزيل التطبيق</span>
+                </button>
+              )}
+
+              <div className="flex items-center gap-3 sm:gap-4 text-[11px] font-mono text-slate-400">
+                <span>{LINKS_DATA.length} رابط رسمي</span>
+                <span>•</span>
+                <span>تحديث تلقائي لرقم العضوية</span>
+                <span>•</span>
+                <span>حفظ محلي آمن</span>
+              </div>
             </div>
           </div>
         </div>

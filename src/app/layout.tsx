@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Tajawal, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -19,9 +19,25 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "TAG eWorld | دليل الروابط السريعة",
   description: "دليلك السريع والشامل لكافة روابط وخدمات ومنتجات DXN و eWorld مع تخصيص الروابط الذكية",
-  icons: {
-    icon: "/favicon.svg",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "دليل الروابط السريعة",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0A192F",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

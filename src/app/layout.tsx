@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "دليل الروابط السريعة TAG eWorld",
+    title: "دليل الروابط DXN",
   },
   icons: {
     icon: [

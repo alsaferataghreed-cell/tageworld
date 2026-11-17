@@ -211,7 +211,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() =>
-                    showToast("تطبيق دليل الروابط السريعة منزل بالفعل على جهازك")
+                    showToast("تطبيق دليل الروابط السريعة TAG eWorld منزل بالفعل على جهازك")
                   }
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold cursor-default"
                 >

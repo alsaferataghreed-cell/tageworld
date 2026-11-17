@@ -82,7 +82,7 @@ export function usePwaInstall(
       localStorage.setItem(STORAGE_INSTALLED_KEY, "true");
     }
     if (notify) {
-      onToastRef.current?.("تم تثبيت تطبيق دليل الروابط السريعة بنجاح!");
+      onToastRef.current?.("تم تثبيت تطبيق دليل الروابط السريعة TAG eWorld بنجاح!");
     }
   }, []);
 
@@ -334,7 +334,7 @@ export default function PwaInstallModal({ pwa }: PwaInstallModalProps) {
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0A192F] to-[#0F2557] p-1 shadow-lg shadow-[#0A192F]/15 flex-shrink-0 flex items-center justify-center overflow-hidden">
               <Image
                 src="/icon-192.png"
-                alt="شعار دليل الروابط السريعة"
+                alt="شعار دليل الروابط السريعة TAG eWorld"
                 width={48}
                 height={48}
                 className="w-12 h-12 rounded-xl object-contain"
@@ -350,7 +350,7 @@ export default function PwaInstallModal({ pwa }: PwaInstallModalProps) {
                 id="pwa-install-title"
                 className="text-lg sm:text-xl font-extrabold text-[#0A192F] leading-snug"
               >
-                دليل الروابط السريعة
+                دليل الروابط السريعة TAG eWorld
               </h2>
             </div>
           </div>
@@ -360,7 +360,7 @@ export default function PwaInstallModal({ pwa }: PwaInstallModalProps) {
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5">
                 ثبّت تطبيق{" "}
                 <span className="font-bold text-[#0A192F]">
-                  دليل الروابط السريعة
+                  دليل الروابط السريعة TAG eWorld
                 </span>{" "}
                 على جهازك للوصول الفوري لجميع روابط DXN و eWorld بضغطة واحدة وكأنه
                 تطبيق مستقل بالكامل.
@@ -464,7 +464,7 @@ export default function PwaInstallModal({ pwa }: PwaInstallModalProps) {
                         <strong className="text-[#0A192F]">«إضافة»</strong> ليظهر
                         التطبيق باسم{" "}
                         <strong className="text-[#0A192F]">
-                          دليل الروابط السريعة
+                          دليل الروابط السريعة TAG eWorld
                         </strong>
                         .
                       </span>

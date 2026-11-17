@@ -1,4 +1,4 @@
-const CACHE_NAME = "tag-eworld-pwa-v1";
+const CACHE_NAME = "tag-eworld-pwa-v2";
 const CORE_ASSETS = [
   "/",
   "/manifest.json",
